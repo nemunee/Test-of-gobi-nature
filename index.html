@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gobi Nature Camp</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#000;
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  height:100vh;
+  overflow:hidden;
+}
+
+.hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter: brightness(0.8);
+}
+
+.hero-text{
+  position:absolute;
+  top:40%;
+  left:8%;
+  color:white;
+  z-index:2;
+}
+
+.hero-text h1{
+  font-size:60px;
+  margin:0;
+}
+
+.hero-text h2{
+  font-size:40px;
+  color:#ffcc00;
+  margin:10px 0;
+}
+
+/* MENU */
+.menu{
+  position:absolute;
+  bottom:30px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  z-index:2;
+}
+
+.card{
+  background:white;
+  padding:12px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+  background:#f2f2f2;
+}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-content{
+  background:white;
+  width:90%;
+  max-width:600px;
+  padding:20px;
+  border-radius:12px;
+  animation:pop 0.2s;
+}
+
+@keyframes pop{
+  from{transform:scale(0.8);}
+  to{transform:scale(1);}
+}
+
+.close{
+  float:right;
+  font-size:25px;
+  cursor:pointer;
+}
+
+/* INPUT */
+input,select{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border:1px solid #ddd;
+  border-radius:6px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#2c6e49;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hero-text h1{font-size:40px;}
+  .hero-text h2{font-size:28px;}
+  .card{font-size:14px;}
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="images/gobi.jpg">
+
+  <div class="hero-text">
+    <h1>GOBI</h1>
+    <h2>NATURE CAMP</h2>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+    <div class="card" onclick="openModal('about')">ℹ️ Тухай</div>
+    <div class="card" onclick="openModal('ger')">🏕️ Гэр</div>
+    <div class="card" onclick="openModal('food')">🍽️ Хоол</div>
+    <div class="card" onclick="openModal('booking')">📝 Захиалга</div>
+    <div class="card" onclick="openModal('map')">📍 Байршил</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('about')">&times;</span>
+    <h2>Бидний тухай</h2>
+    <p>Цагаан суварга орчимд байрлах аялал жуулчлалын бааз.</p>
+  </div>
+</div>
+
+<!-- GER -->
+<div id="ger" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('ger')">&times;</span>
+    <h2>Гэрүүд</h2>
+    <img src="images/ger1.jpg" style="width:100%;border-radius:10px;">
+  </div>
+</div>
+
+<!-- FOOD -->
+<div id="food" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('food')">&times;</span>
+    <h2>Хоол</h2>
+    <img src="images/food.jpg" style="width:100%;border-radius:10px;">
+  </div>
+</div>
+
+<!-- BOOKING -->
+<div id="booking" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('booking')">&times;</span>
+
+    <h2>Захиалга</h2>
+
+    <input id="name" placeholder="Нэр">
+    <input id="phone" placeholder="Утас">
+    <input id="people" type="number" placeholder="Хүний тоо">
+
+    <select id="food">
+      <option>Хоолгүй</option>
+      <option>Хоолтой</option>
+    </select>
+
+    <button onclick="sendWhatsApp()">WhatsApp илгээх</button>
+  </div>
+</div>
+
+<!-- MAP -->
+<div id="map" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('map')">&times;</span>
+    <h2>Байршил</h2>
+
+    <iframe src="https://maps.google.com/maps?q=Tsagaan%20Suvarga&z=13&output=embed"></iframe>
+  </div>
+</div>
+
+<script>
+function openModal(id){
+  document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
+}
+
+/* outside click хаах */
+window.onclick = function(e){
+  document.querySelectorAll(".modal").forEach(m=>{
+    if(e.target === m) m.classList.remove("show");
+  });
+}
+
+/* WhatsApp */
+function sendWhatsApp(){
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let people = document.getElementById("people").value;
+  let food = document.getElementById("food").value;
+
+  if(!name || !phone || !people){
+    alert("Бүх мэдээллээ бөглөнө үү!");
+    return;
+  }
+
+  let msg =
+`Gobi Nature Camp захиалга:
+Нэр: ${name}
+Утас: ${phone}
+Хүн: ${people}
+Хоол: ${food}`;
+
+  let url = "https://wa.me/97699112233?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
